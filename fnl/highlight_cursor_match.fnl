@@ -5,6 +5,15 @@
 (macro schedule [...]
   `(vim.schedule (fn [] ,...)))
 
+(local config {:highlight_group "IncSearch"})
+
+(fn setup [opts]
+  (each [k v (pairs opts)]
+         (tset config k v)))
+
+(fn highlight-group-name []
+  config.highlight_group)
+
 (fn highlight-current [buf pos-row pos-col]
   ; Applies a ext-mark highlight mimmicing the current match text
   ; and sets up autocommands to clear that ext-mark on some conditions.
@@ -15,7 +24,7 @@
   (local matched-text (vim.fn.matchstr line query))
 
   ; apply highlight mask
-  (local opts {:virt_text [[matched-text "IncSearch"]]
+  (local opts {:virt_text [[matched-text (highlight-group-name)]]
                :virt_text_pos :overlay
                :end_line (- pos-row 1)
                :end_col (+ pos-col (length matched-text))})
@@ -52,9 +61,7 @@
   (local before-err vim.v.errmsg)
   (api feedkeys key :ni false)
   (schedule 
-    ; if there was no error, and no new error
-    (when (and (= before-err "")
-               (= before-err vim.v.errmsg))
+    (when (= before-err vim.v.errmsg)
       (local [row col] (api win-get-cursor win))
       (highlight-current buf row col))))
 
@@ -75,4 +82,5 @@
 
 {:n #(feedkey :n)
  :N #(feedkey :N)
- "/,?" #(searched)}
+ "/,?" #(searched)
+ : setup}
