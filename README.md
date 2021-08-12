@@ -1,10 +1,10 @@
-# Highlight Cursor Match
+# Highlight Current N
 
 ![](../assets/images/demo.gif)
 
 *[See demo configuration.](#demo-configuration)*
 
-*highlight-cursor-match* highlights the current `/`, `?` or `*` match
+*highlight-current-n* highlights the current `/`, `?` or `*` match
 under your cursor when pressing `n` or `N` and gets out of the way afterwards.
 
 ## Installation
@@ -14,7 +14,7 @@ under your cursor when pressing `n` or `N` and gets out of the way afterwards.
 - Neovim 0.5
 
 ```lua
-your_package_manager "rktjmp/highlight-cursor-match.nvim"
+your_package_manager "rktjmp/highlight-current-n.nvim"
 ```
 
 ## Setup & Usage
@@ -25,7 +25,7 @@ Default options are shown, calling setup is **not** required unless you are
 changing an option.
 
 ```lua
-require("highlight_cursor_match").setup({
+require("highlight_current_n").setup({
   highlight_group = "IncSearch" -- highlight group name to use for highlight
 })
 ```
@@ -35,55 +35,55 @@ regarding highlighting `/` and `?` searches.
 
 **Maps**
 
-*highlight-cursor-match* provides 2 `<Plug>` keymaps for your use.
+*highlight-current-n* provides 2 `<Plug>` keymaps for your use.
 
 *Note: You want to use `nmap`, not `nnoremap` for `<Plug>` mappings.*
 
-**`<Plug>(highlight-cursor-match-n)`** should be mapped to `n`.
+**`<Plug>(highlight-current-n-n)`** should be mapped to `n`.
 
 ```viml
-nmap n <Plug>(highlight-cursor-match-n)
+nmap n <Plug>(highlight-current-n-n)
 ```
 
-**`<Plug>(highlight-cursor-match-N)`** should be mapped to `N`.
+**`<Plug>(highlight-current-n-N)`** should be mapped to `N`.
 
 ```viml
-nmap N <Plug>(highlight-cursor-match-N)
+nmap N <Plug>(highlight-current-n-N)
 ```
 
 **Functions**
 
-*highlight-cursor-match* provides 3 functions, but probably only 1 is useful.
+*highlight-current-n* provides 3 functions, but probably only 1 is useful.
 
-**`require("highlight_cursor_match").n()`**
+**`require("highlight_current_n").n()`**
 
 Executes `feedkeys(n)` and applies highlight when appropriate. Normally best
 run via the provided `<Plug>` mapping.
 
-**`require("highlight_cursor_match").N()`**
+**`require("highlight_current_n").N()`**
 
 Executes `feedkeys(N)` and applies highlight when appropriate. Normally best
 run via the provided `<Plug>` mapping.
 
-**`require("highlight_cursor_match")["/,?"]()`**
+**`require("highlight_current_n")["/,?"]()`**
 
 Applies highlight at cursor, most useful when used in combination with the
 following autocommand, be careful when escaping `\?` in lua configurations.
 
 ```viml
-autocmd CmdlineLeave /,\? lua require('highlight_cursor_match')['/,?']()
+autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
 ```
 
 ## Demo Configuration
 
-*highlight-cursor-match* only provides two maps to show highlights, but the
+*highlight-current-n* only provides two maps to show highlights, but the
 following configuration may be preferred in real world use, especially the last
 `CmdlineLeave` autocommand.
 
 ```viml
 " Map keys
-nmap n <Plug>(highlight-cursor-match-n)
-nmap N <Plug>(highlight-cursor-match-N)
+nmap n <Plug>(highlight-current-n-n)
+nmap N <Plug>(highlight-current-n-N)
 
 " If you want the highlighting to take effect in other maps they must
 " also be nmaps (or rather, not "nore").
@@ -103,6 +103,6 @@ augroup ClearSearchHL
   autocmd CmdlineLeave /,\? set nohlsearch
   " this will apply similar n|N highlighting to the first search result
   " careful with escaping ? in lua, you may need \\?
-  autocmd CmdlineLeave /,\? lua require('highlight_cursor_match')['/,?']()
+  autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
 augroup END
 ```

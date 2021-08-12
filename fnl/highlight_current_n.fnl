@@ -35,7 +35,7 @@
   (local clear-cmd (string.format 
                      ":lua vim.api.nvim_buf_clear_namespace(%d, %d, 0, -1)"
                      buf ns-id))
-  (local cmds ["augroup HighlightCursorMatch"
+  (local cmds ["augroup HighlightCurrentN"
                ; Don't ! clear existing autocmds One of these will fire, clear
                ; the highlight then the rest will remain until the event. This
                ; doesn't really seem to matter as clearing a cleared namespace

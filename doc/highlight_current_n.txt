@@ -1,0 +1,123 @@
+*highlight-current-n* highlight current n|N
+>
+          _     _       _     _ _       _     _
+         | |   (_)     | |   | (_)     | |   | |
+         | |__  _  __ _| |__ | |_  __ _| |__ | |_
+         | '_ \| |/ _` | '_ \| | |/ _` | '_ \| __|
+         | | | | | (_| | | | | | | (_| | | | | |_  _
+         |_| |_|_|\__, |_| |_|_|_|\__, |_| |_|\__|| |
+                     ___ _   _ _ __ _ __ ___ _ __ | |_   _ __
+                    / __| | | | '__| '__/ _ \ '_ \| __| | '_ \
+                   | (__| |_| | |  | | |  __/ | | | |_  | | | |
+                    \___|\__,_|_|  |_|  \___|_| |_|\__| |_| |_|
+
+      Highlights current {n}/{N} at your cursor, hides automatically.
+
+=======================================================  *highlight-current-n-toc*
+
+Install ............................................ *highlight-current-n-install*
+Setup ................................................ *highlight-current-n-setup*
+Maps .................................................. *highlight-current-n-maps*
+Functions ........................................ *highlight-current-n-functions*
+Demo Configuration ...................... *highlight-current-n-demo-configuration*
+
+==================================================== *highlight-current-n-install*
+
+Install ~
+
+*Requirements*
+
+- Neovim 0.5
+
+*Installation*
+
+Use a package manager:
+>
+    your_package_manager "rktjmp/highlight-current-n.nvim"
+
+====================================================== *highlight-current-n-setup*
+
+Setup ~
+
+Default options are shown, calling setup is **not** required unless you are
+changing an option.
+>
+  require("highlight_current_n").setup({
+    highlight_group = "IncSearch" -- highlight group name to use for highlight
+  })
+
+See also |highlight-current-n-demo-configuration| for important information
+regarding highlighting `/` and `?` searches.
+
+======================================================= *highlight-current-n-maps*
+
+Maps ~
+
+`highlight-current-n` provides 2 `<Plug>` keymaps for your use.
+
+Note: You want to use `nmap`, not `nnoremap` for `<Plug>` mappings.
+
+`<Plug>(highlight-current-n-n)` should be mapped to `n`.
+>
+  nmap n <Plug>(highlight-current-n-n)
+
+`<Plug>(highlight-current-n-N)` should be mapped to `N`.
+>
+  nmap N <Plug>(highlight-current-n-N)
+
+================================================== *highlight-current-n-functions*
+
+Functions ~
+
+`highlight-current-n` provides 3 functions, but probably only 1 is useful.
+
+`require("highlight_current_n").n()`
+
+Executes `feedkeys(n)` and applies highlight when appropriate. Normally best
+run via the provided `<Plug>` mapping.
+
+`require("highlight_current_n").N()`
+
+Executes `feedkeys(N)` and applies highlight when appropriate. Normally best
+run via the provided `<Plug>` mapping.
+
+`require("highlight_current_n")["/,?"]()`
+
+Applies highlight at cursor, most useful when used in combination with the
+following autocommand, be careful when escaping `\?` in lua configurations.
+>
+  autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
+
+========================================= *highlight-current-n-demo-configuration*
+
+Demo Configuration ~
+
+`highlight-current-n` only provides two maps to show highlights, but the
+following configuration may be preferred in real world use, especially the last
+`CmdlineLeave` autocommand.
+>
+  " Map keys
+  nmap n <Plug>(highlight-current-n-n)
+  nmap N <Plug>(highlight-current-n-N)
+
+  " If you want the highlighting to take effect in other maps they must
+  " also be nmaps (or rather, not "nore").
+  "
+  " * will search <cword> ahead, but it can be more ergonomic to have *
+  " simply fill the / register with the current <cword>, which makes future
+  " commands like cgn "feel better". This effectively does that by performing
+  " "search ahead <cword> (*), go back to last match (N)".
+  nmap * *N
+
+  " Some QOL autocommands
+  augroup ClearSearchHL
+    autocmd!
+    " You may only want to see hlsearch /while/ searching, you can automatically
+    " toggle hlsearch with the following autocommands
+    autocmd CmdlineEnter /,\? set hlsearch
+    autocmd CmdlineLeave /,\? set nohlsearch
+    " this will apply similar n|N highlighting to the first search result
+    " careful with escaping ? in lua, you may need \\?
+    autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
+  augroup END
+
