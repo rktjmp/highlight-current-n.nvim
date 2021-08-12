@@ -6,19 +6,23 @@
   `(vim.schedule (fn [] ,...)))
 
 (fn highlight-current [buf pos-row pos-col]
-  ; applies highlight of current / register 
+  ; Applies a ext-mark highlight mimmicing the current match text
+  ; and sets up autocommands to clear that ext-mark on some conditions.
 
-  ; * searches add word bounds to query but make length wrong
-  (local query (-> (vim.fn.getreg "/")
-                   (string.gsub "\\<" "")
-                   (string.gsub "\\>" "")
-                   (string.gsub "\\." "."))) ;; maybe over zealous?
-  (local opts {:virt_text [[query "IncSearch"]]
+  ; get matched text
+  (local query (vim.fn.getreg "/"))
+  (local line (. (api buf-get-lines buf (- pos-row 1) pos-row false) 1))
+  (local matched-text (vim.fn.matchstr line query))
+
+  ; apply highlight mask
+  (local opts {:virt_text [[matched-text "IncSearch"]]
                :virt_text_pos :overlay
                :end_line (- pos-row 1)
-               :end_col (+ pos-col (length query))})
+               :end_col (+ pos-col (length matched-text))})
   (local ns-id (api create-namespace ""))
   (api buf-set-extmark buf ns-id (- pos-row 1) pos-col opts)
+
+  ; setup automatic clearing
   (local clear-cmd (string.format 
                      ":lua vim.api.nvim_buf_clear_namespace(%d, %d, 0, -1)"
                      buf ns-id))
@@ -48,25 +52,26 @@
   (local before-err vim.v.errmsg)
   (api feedkeys key :ni false)
   (schedule 
-      ; if there was no error, and no new error
-      (when (and (= before-err "")
+    ; if there was no error, and no new error
+    (when (and (= before-err "")
                (= before-err vim.v.errmsg))
-        (local [after-row after-col] (api win-get-cursor win))
-        (highlight-current buf after-row after-col))))
+      (local [row col] (api win-get-cursor win))
+      (highlight-current buf row col))))
 
 (fn searched []
   (local win (api get-current-win))
   (local buf (api get-current-buf))
   (local [before-row before-col] (api win-get-cursor win))
   (schedule
-      ; this does make executing /key, / (repeat search) for "|key" at |, not
-      ; highlight. searching /key for "|key" at | will work.  probably there is
-      ; some way to get the last command argument, check for "/" with no args
-      ; and force the highlight (only if current pos = start of last search
-      ; register...?) Lot of work for probably a 0.1% pain point.
-      (local [after-row after-col] (api win-get-cursor win))
-      (if (or (~= before-row after-row) (~= before-col after-col))
-        (highlight-current buf after-row after-col))))
+    ; this does make executing /key, / (repeat search) for "|key" at |, not
+    ; highlight. searching /key for "|key" at | will work.  probably there is
+    ; some way to get the last command argument, check for "/" with no args
+    ; and force the highlight (only if current pos = start of last search
+    ; register...?) Lot of work for probably a 0.1% pain point.
+    (local [after-row after-col] (api win-get-cursor win))
+    (if (or (~= before-row after-row)
+            (~= before-col after-col))
+      (highlight-current buf after-row after-col))))
 
 {:n #(feedkey :n)
  :N #(feedkey :N)
