@@ -3,6 +3,3 @@ nnoremap <Plug>(highlight-cursor-match-n)
 
 nnoremap <Plug>(highlight-cursor-match-N)
       \ :lua require("highlight_cursor_match").N()<cr>
-
-nnoremap <Plug>(highlight-cursor-match-search)
-      \ :lua require("highlight_cursor_match")["/,?"]()<cr>
