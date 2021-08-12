@@ -1,4 +1,4 @@
-# Highlight Current N
+# *highlight-current-n*
 
 ![](../assets/images/demo.gif)
 
