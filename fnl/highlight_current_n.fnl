@@ -15,7 +15,7 @@
   config.highlight_group)
 
 (fn highlight-current [buf pos-row pos-col]
-  ; Applies a ext-mark highlight mimmicing the current match text
+  ; Applies a ext-mark highlight to mimic the current match text
   ; and sets up autocommands to clear that ext-mark on some conditions.
 
   ; get matched text
