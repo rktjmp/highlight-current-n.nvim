@@ -32,9 +32,11 @@
   (api buf-set-extmark buf ns-id (- pos-row 1) pos-col opts)
 
   ; setup automatic clearing
-  (local clear-cmd (string.format 
-                     ":lua vim.api.nvim_buf_clear_namespace(%d, %d, 0, -1)"
-                     buf ns-id))
+  ; :PackerSync -> /search -> q "invalid buf id", so check it exists before we run
+  ; possibly revisit this with a nicer solution at some point...
+  (local clear-cmd (string.format
+                     ":lua if vim.fn.bufexists(%d) == 1 then vim.api.nvim_buf_clear_namespace(%d, %d, 0, -1) end"
+                     buf buf ns-id))
   (local cmds ["augroup HighlightCurrentN"
                ; Don't ! clear existing autocmds One of these will fire, clear
                ; the highlight then the rest will remain until the event. This
@@ -60,7 +62,7 @@
   ; before with "*" shifting the cursor to the start of the cword). 
   (local before-err vim.v.errmsg)
   (api feedkeys key :ni false)
-  (schedule 
+  (schedule
     (when (= before-err vim.v.errmsg)
       (local [row col] (api win-get-cursor win))
       (highlight-current buf row col))))

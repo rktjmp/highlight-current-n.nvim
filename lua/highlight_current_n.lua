@@ -15,7 +15,7 @@ local function highlight_current(buf, pos_row, pos_col)
   local opts = {end_col = (pos_col + #matched_text), end_line = (pos_row - 1), virt_text = {{matched_text, highlight_group_name()}}, virt_text_pos = "overlay"}
   local ns_id = vim.api.nvim_create_namespace("")
   vim.api.nvim_buf_set_extmark(buf, ns_id, (pos_row - 1), pos_col, opts)
-  local clear_cmd = string.format(":lua vim.api.nvim_buf_clear_namespace(%d, %d, 0, -1)", buf, ns_id)
+  local clear_cmd = string.format(":lua if vim.fn.bufexists(%d) == 1 then vim.api.nvim_buf_clear_namespace(%d, %d, 0, -1) end", buf, buf, ns_id)
   local cmds = {"augroup HighlightCurrentN", ("autocmd CursorMoved * ++once " .. clear_cmd), ("autocmd InsertEnter * ++once " .. clear_cmd), ("autocmd CmdlineEnter * ++once " .. clear_cmd), "augroup END"}
   return vim.cmd(table.concat(cmds, "\n"))
 end
