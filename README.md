@@ -106,3 +106,12 @@ augroup ClearSearchHL
   autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
 augroup END
 ```
+
+## Issues
+
+*highlight-current-n* works by setting a highlight group at your cursor position
+after searching.  This highlight is not "wrap aware", it begins at the start of
+the match and extends for `length(search_string)` characters. Sometimes you
+may see the the highlight "stick out" past the edge of a wrapped line. This is 
+pretty uncommon in my experience but it probably depends on your typical terminal 
+and content size
