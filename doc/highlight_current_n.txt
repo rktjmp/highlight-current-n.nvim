@@ -25,11 +25,11 @@ Demo Configuration ...................... *highlight-current-n-demo-configuratio
 
 Install ~
 
-*Requirements*
+Requirements:
 
 - Neovim 0.5
 
-*Installation*
+Installation:
 
 Use a package manager:
 >
@@ -39,7 +39,7 @@ Use a package manager:
 
 Setup ~
 
-Default options are shown, calling setup is **not** required unless you are
+Default options are shown, calling setup is _not_ required unless you are
 changing an option.
 >
   require("highlight_current_n").setup({
