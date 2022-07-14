@@ -51,6 +51,41 @@ nmap n <Plug>(highlight-current-n-n)
 nmap N <Plug>(highlight-current-n-N)
 ```
 
+**Consistent Search Direction** 
+
+To always search "up and down" vs "ahead and back" (as dictated by `/` and
+`?`), you can use these mappings:
+
+```lua
+local function _1_()
+  local hcn = require("highlight_current_n")
+  local feedkeys = vim.api.nvim_feedkeys
+  local _2_ = vim.v.searchforward
+  if (_2_ == 0) then
+    return hcn.N()
+  elseif (_2_ == 1) then
+    return hcn.n()
+  else
+    return nil
+  end
+end
+vim.keymap.set("n", "n", _1_, {noremap = true})
+
+local function _4_()
+  local hcn = require("highlight_current_n")
+  local feedkeys = vim.api.nvim_feedkeys
+  local _5_ = vim.v.searchforward
+  if (_5_ == 0) then
+    return hcn.n()
+  elseif (_5_ == 1) then
+    return hcn.N()
+  else
+    return nil
+  end
+end
+return vim.keymap.set("n", "N", _4_, {noremap = true})
+```
+
 **Functions**
 
 *highlight-current-n* provides 3 functions, but probably only 1 is useful.
