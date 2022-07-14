@@ -69,7 +69,7 @@ local function _1_()
     return nil
   end
 end
-vim.keymap.set("n", "n", _1_, {noremap = true})
+vim.keymap.set("n", "n", _1_)
 
 local function _4_()
   local hcn = require("highlight_current_n")
@@ -83,7 +83,7 @@ local function _4_()
     return nil
   end
 end
-return vim.keymap.set("n", "N", _4_, {noremap = true})
+return vim.keymap.set("n", "N", _4_)
 ```
 
 **Functions**
