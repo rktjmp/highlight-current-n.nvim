@@ -15,11 +15,11 @@
 
 =======================================================  *highlight-current-n-toc*
 
-Install ............................................ *highlight-current-n-install*
-Setup ................................................ *highlight-current-n-setup*
-Maps .................................................. *highlight-current-n-maps*
-Functions ........................................ *highlight-current-n-functions*
-Demo Configuration ...................... *highlight-current-n-demo-configuration*
+Install ............................................ |highlight-current-n-install|
+Setup ................................................ |highlight-current-n-setup|
+Maps .................................................. |highlight-current-n-maps|
+Functions ........................................ |highlight-current-n-functions|
+Demo Configuration ...................... |highlight-current-n-demo-configuration|
 
 ==================================================== *highlight-current-n-install*
 
